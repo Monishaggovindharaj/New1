@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div id="3d-container" style="width: 100%; height: 400px;"></div>
+
+    <script>
+        const container = document.getElementById("3d-container");
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true }); // Enable alpha for transparent background
+
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        // Set the renderer's background color to white
+        renderer.setClearColor(0xffffff);
+
+        // Position the camera (adjust as needed)
+        camera.position.set(0, 0, 2);
+
+        const loader = new THREE.GLTFLoader();
+        loader.load('../assets/StainlessSteelBottle001.glb', function (gltf) {
+            const model = gltf.scene;
+            scene.add(model);
+
+            const animate = function () {
+                requestAnimationFrame(animate);
+                // Remove the camera rotation to keep it fixed
+                // camera.rotation.x += 0.01;
+                // camera.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            };
+
+            animate();
+        });
+    </script>
+</body>
+</html>
